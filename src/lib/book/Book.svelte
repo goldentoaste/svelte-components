@@ -136,12 +136,13 @@
         transform-origin: top left;
         transform-style: preserve-3d;
 
-        transition: transform 900ms ease-out;
+        transition: transform 900ms ease-out, z-index 900ms ease-out;
     }
 
     .pageContent {
         transform-origin: 50% 50%;
         transform-style: preserve-3d;
+        transform: translateZ(1px);
 
         position: absolute;
         top: 0;
@@ -156,7 +157,9 @@
 
     .pageContent.oddPage {
         /* flip page */
-        transform: rotateY(180deg);
+        transform: translateZ(-1px) rotateY(180deg);
+      
+
     }
 
     .pageRotationRoot.flipped {
