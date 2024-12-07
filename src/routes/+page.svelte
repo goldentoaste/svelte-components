@@ -1,5 +1,6 @@
 <script lang="ts">
     import Book from "$lib/book/Book.svelte";
+    import FlexibleBook from "$lib/book/FlexibleBook.svelte";
 
     const images = [
         { img: "/1.jpg", desc: "Chaos fusion" },
@@ -17,16 +18,18 @@
     ];
 
     let pageIndex = $state(0);
-
+    let bookRef: FlexibleBook;
     function nextPage() {
         if (pageIndex < images.length / 2) {
             pageIndex += 1;
+            bookRef.nextPage();
         }
     }
 
     function prevPage() {
         if (pageIndex > 0) {
             pageIndex -= 1;
+            bookRef.prevPage();
         }
     }
 </script>
@@ -49,6 +52,10 @@
     <button onclick={prevPage}>Prev page</button>
 
     <button onclick={nextPage}>Next page</button>
+</div>
+
+<div class="bookParent" style="width: 400px; height:400px">
+    <FlexibleBook bind:this={bookRef} imgUrls={images.map((item) => item.img)}></FlexibleBook>
 </div>
 
 <style>

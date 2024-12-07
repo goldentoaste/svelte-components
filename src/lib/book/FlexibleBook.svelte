@@ -3,8 +3,8 @@
 
     interface BookType {
         imgUrls: string[];
-        index: number;
-        singlePageMode: boolean;
+        index?: number;
+        singlePageMode?: boolean;
     }
 
     interface Page {
@@ -13,7 +13,7 @@
         index: number;
     }
 
-    let { imgUrls, index = $bindable(), singlePageMode = false }: BookType = $props();
+    let { imgUrls, index = $bindable(0), singlePageMode = false }: BookType = $props();
 
     let pages: Page[] = $derived.by(() => {
         if (singlePageMode) {
@@ -37,12 +37,14 @@
         return out;
     });
 
+    
     let prevUrl: string | undefined = $state();
     let nextUrl: string | undefined = $state();
-
+    
     let transitionPage: Page | undefined = $state();
+    $inspect(index, prevUrl, nextUrl);
 
-    const transitionTime = 500;
+    const transitionTime = 1000;
     export function nextPage() {
         if (transitionPage) {
             return; // block transition if there already one.
@@ -50,6 +52,10 @@
 
         const nextPage = pages[index + 1];
         nextUrl = nextPage ? nextPage.frontPage : "";
+
+        // start transition
+        transitionPage = pages[index];
+
         index += 1; // trigger flip animation
 
         setTimeout(() => {
@@ -59,8 +65,13 @@
     }
 
     export function prevPage() {
-        const prevPage = pages[index - 1];
+        if (transitionPage) {
+            return; // block transition if there already one.
+        }
+
+        const prevPage = pages[index -2];
         prevUrl = prevPage ? prevPage.backPage : "";
+        transitionPage = pages[index - 1 ];
         index -= 1;
 
         setTimeout(() => {
@@ -75,6 +86,7 @@
         frontUrl={transitionPage ? transitionPage.frontPage : ""}
         backUrl={transitionPage ? (transitionPage.backPage ?? "") : ""}
         {index}
+        animationTime={transitionTime}
     ></FlexibleBookPage>
 
     <div class="prevPage" style="--background: url({prevUrl})"></div>
@@ -84,25 +96,22 @@
 
 <style>
     .bookRoot {
+        position: relative;
         width: 100%;
         height: 100%;
-    }
 
-    .prevPage {
-        left: 0;
-    }
+        transform-style: preserve-3d;
+        background-color: brown;
 
-    .nextPage {
-        left: 50%;
+        display: flex;
+        padding: 1rem;
+        transform: perspective(1000px) rotateX(25deg);
     }
 
     .prevPage,
     .nextPage {
-        width: 50%;
-        height: 100%;
-
-        position: absolute;
-        top: 0;
+        flex: 1;
+        background-color: red;
         background-image: var(--background);
     }
 </style>
