@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from "$app/stores";
     import FlexibleBookPage from "./FlexibleBookPage.svelte";
 
     interface BookType {
@@ -39,7 +40,7 @@
 
     
     let prevUrl: string | undefined = $state();
-    let nextUrl: string | undefined = $state();
+    let nextUrl: string | undefined = $state(pages[0].frontPage);
     
     let transitionPage: Page | undefined = $state();
     $inspect(index, prevUrl, nextUrl);
@@ -61,7 +62,7 @@
         setTimeout(() => {
             prevUrl = transitionPage?.backPage;
             transitionPage = undefined;
-        }, transitionTime);
+        }, transitionTime );
     }
 
     export function prevPage() {
@@ -77,7 +78,7 @@
         setTimeout(() => {
             nextUrl = transitionPage?.frontPage;
             transitionPage = undefined;
-        }, transitionTime);
+        }, transitionTime );
     }
 </script>
 
