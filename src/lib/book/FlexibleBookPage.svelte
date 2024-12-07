@@ -178,7 +178,7 @@
             transform: rotateY(0);
         }
         50% {
-            transform: rotateY(15deg);
+            transform: rotateY(12deg);
         }
     }
 
@@ -188,7 +188,7 @@
             transform: rotateY(0);
         }
         50% {
-            transform: rotateY(-15deg);
+            transform: rotateY(-12deg);
         }
     }
 
