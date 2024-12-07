@@ -44,7 +44,7 @@
     class:reverse={animationState === "backward"}
     style="--parentWidth:{imgWidth}px; --duration: {animationTime}ms"
 >
-    <div class="pageSide frontSide" style="--imgUrl: url('{frontUrl}'); " bind:clientWidth={imgWidth}>
+    <div class="pageSide frontSide" style="--frontUrl: url('{frontUrl}'); --backUrl: url('{backUrl}')" bind:clientWidth={imgWidth}>
         <!-- 8 segments -->
         <div class="pageSegment" style="--idx:0;">
             <div class="pageSegment" style="--idx:1;">
@@ -63,29 +63,12 @@
         </div>
     </div>
 
-    <div class="pageSide backSide" style="--imgUrl:url('{backUrl}');">
-        <!-- 8 segments -->
-        <div class="pageSegment" style="--idx:0;">
-            <div class="pageSegment" style="--idx:1;">
-                <div class="pageSegment" style="--idx:2;">
-                    <div class="pageSegment" style="--idx:3;">
-                        <div class="pageSegment" style="--idx:4;">
-                            <div class="pageSegment" style="--idx:5;">
-                                <div class="pageSegment" style="--idx:6;">
-                                    <div class="pageSegment" style="--idx:7;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  
 </div>
 
 <style>
     .hidden {
-        /* display: none; */
+        display: none;
     }
 
     .pageRoot {
@@ -120,12 +103,13 @@
 
     .pageSide > .pageSegment {
         left: 0;
+        width: calc(100% / 8);
     }
 
     .pageSegment {
         height: 100%;
-        --width: calc(var(--parentWidth) / 8);
-        width: var(--width);
+
+        width: 100%;
 
         position: absolute;
         top: 0;
@@ -133,13 +117,38 @@
 
         transform-style: preserve-3d;
         transform-origin: left;
+        background-color: red;
+    }
 
-        transition: transform var(--duration) ease-out;
-        background-size: var(--parentWidth) 100%;
-        /* background-size: 400px 400px; */
+    .pageSegment::before{
+        content: "";
 
-        background-position-x: calc(-1 * var(--idx) * var(--parentWidth) / 8);
-        background-image: var(--imgUrl);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        
+        transform:scaleX(1.02);
+        background-image: var(--frontUrl);
+        background-size: 800% 100%;
+        background-position-x: calc(-1 * var(--idx) * 100%);
+        backface-visibility: hidden;
+    }
+
+    .pageSegment::after{
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        
+        background-image: var(--backUrl);
+        background-size: 800% 100%;
+        background-position-x: calc(-1 * (7 - var(--idx)) * 100%);
+        transform-origin: center;
+        transform: rotateY(180deg) scaleX(1.02);
         backface-visibility: hidden;
     }
 
@@ -147,15 +156,20 @@
         animation: segmentAnimation var(--duration) 1 ease-out;
     }
 
-    .flip.reverse > .pageSide * {
-        animation: reverseSegmentAnimation;
+    .reverse > .pageSide * {
+        animation: reverseSegmentAnimation var(--duration) 1 ease-out;
+
     }
+
+    
+
 
     .pageRoot.flip {
         animation: pageAnimation 1000ms ease-out 1;
     }
     .pageRoot.flip.reverse {
-        animation-direction: reverse;
+        animation: reversePageAnimation 1000ms ease-out 1;
+
     }
 
     @keyframes segmentAnimation {
@@ -164,7 +178,7 @@
             transform: rotateY(0);
         }
         50% {
-            transform: rotateY(5deg);
+            transform: rotateY(15deg);
         }
     }
 
@@ -183,6 +197,15 @@
             transform: rotateY(0);
         }
         100% {
+            transform: rotateY(-180deg);
+        }
+    }
+
+    @keyframes reversePageAnimation {
+        100% {
+            transform: rotateY(0);
+        }
+        0% {
             transform: rotateY(-180deg);
         }
     }

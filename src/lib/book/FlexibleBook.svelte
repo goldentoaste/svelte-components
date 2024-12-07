@@ -104,7 +104,7 @@
         background-color: brown;
 
         display: flex;
-        padding: 1rem;
+
         transform: perspective(1000px) rotateX(25deg);
     }
 
@@ -113,5 +113,6 @@
         flex: 1;
         background-color: red;
         background-image: var(--background);
+        background-size: 100% 100%;
     }
 </style>

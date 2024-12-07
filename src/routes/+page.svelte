@@ -54,7 +54,7 @@
     <button onclick={nextPage}>Next page</button>
 </div>
 
-<div class="bookParent" style="width: 400px; height:400px">
+<div class="bookParent" style="width: 800px; height:400px">
     <FlexibleBook bind:this={bookRef} imgUrls={images.map((item) => item.img)}></FlexibleBook>
 </div>
 
