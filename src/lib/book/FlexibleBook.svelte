@@ -43,13 +43,13 @@
     let nextUrl: string | undefined = $state(pages[0].frontPage);
     
     let transitionPage: Page | undefined = $state();
-    $inspect(index, prevUrl, nextUrl);
+
 
     const transitionTime = 1000;
     export function nextPage() {
-        if (transitionPage) {
-            return; // block transition if there already one.
-        }
+        // if (transitionPage) {
+        //     return; // block transition if there already one.
+        // }
 
         const nextPage = pages[index + 1];
         nextUrl = nextPage ? nextPage.frontPage : "";
@@ -61,14 +61,14 @@
 
         setTimeout(() => {
             prevUrl = transitionPage?.backPage;
-            transitionPage = undefined;
+            // transitionPage = undefined;
         }, transitionTime );
     }
 
     export function prevPage() {
-        if (transitionPage) {
-            return; // block transition if there already one.
-        }
+        // if (transitionPage) {
+        //     return; // block transition if there already one.
+        // }
 
         const prevPage = pages[index -2];
         prevUrl = prevPage ? prevPage.backPage : "";
@@ -77,7 +77,7 @@
 
         setTimeout(() => {
             nextUrl = transitionPage?.frontPage;
-            transitionPage = undefined;
+            // transitionPage = undefined;
         }, transitionTime );
     }
 </script>
@@ -112,7 +112,6 @@
     .prevPage,
     .nextPage {
         flex: 1;
-        background-color: red;
         background-image: var(--background);
         background-size: 100% 100%;
     }

@@ -1,4 +1,5 @@
 <script lang="ts">
+
     import Book from "$lib/book/Book.svelte";
     import FlexibleBook from "$lib/book/FlexibleBook.svelte";
 
@@ -16,10 +17,12 @@
         { img: "/11.jpg", desc: "Creature swap" },
         { img: "/12.jpg", desc: "Edlitch Goldenland" },
     ];
-
+ 
     let pageIndex = $state(0);
     let bookRef: FlexibleBook;
     function nextPage() {
+        console.log("----");
+
         if (pageIndex < images.length / 2) {
             pageIndex += 1;
             bookRef.nextPage();
@@ -27,6 +30,8 @@
     }
 
     function prevPage() {
+        console.log("----");
+
         if (pageIndex > 0) {
             pageIndex -= 1;
             bookRef.prevPage();
