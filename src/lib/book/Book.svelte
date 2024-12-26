@@ -1,6 +1,4 @@
-<script lang="ts" generics="T">
-    import type { Snippet } from "svelte";
-
+<script module>
     export interface BookData<T> {
         contentProps: T[];
         pageContent: Snippet<[T]>;
@@ -9,6 +7,11 @@
         minPageHeight: number;
         pageIndex: number;
     }
+</script>
+
+
+<script lang="ts" generics="T">
+    import type { Snippet } from "svelte";  
 
     interface PageData<T> {
         pageId: number;

@@ -11,7 +11,7 @@
         animationTime: number;
     } = $props();
 
-    let currentIndex = $state(index);
+    let currentIndex = index;
     let animationState: undefined | "backward" | "forward" = $state(undefined);
 
     let timer: number | undefined = undefined;
@@ -35,16 +35,21 @@
     });
 
     let imgWidth: number = $state(0);
+
+    $inspect(animationState === undefined, frontUrl, backUrl);
 </script>
 
 <div
     class="pageRoot"
-    class:hidden={animationState === undefined}
     class:flip={animationState !== undefined}
     class:reverse={animationState === "backward"}
     style="--parentWidth:{imgWidth}px; --duration: {animationTime}ms"
 >
-    <div class="pageSide frontSide" style="--frontUrl: url('{frontUrl}'); --backUrl: url('{backUrl}')" bind:clientWidth={imgWidth}>
+    <div
+        class="pageSide frontSide"
+        style="--frontUrl: url('{frontUrl}'); --backUrl: url('{backUrl}')"
+        bind:clientWidth={imgWidth}
+    >
         <!-- 8 segments -->
         <div class="pageSegment" style="--idx:0;">
             <div class="pageSegment" style="--idx:1;">
@@ -62,15 +67,9 @@
             </div>
         </div>
     </div>
-
-  
 </div>
 
 <style>
-    .hidden {
-        display: none;
-    }
-
     .pageRoot {
         position: absolute;
         top: 0;
@@ -81,6 +80,11 @@
         transform-style: preserve-3d;
         z-index: 100;
         transition: transform var(--duration) ease-out;
+        opacity: 0;
+    }
+
+    .pageRoot.flip {
+        opacity: 1;
     }
 
     .pageSide {
@@ -93,12 +97,6 @@
         height: 100%;
         transform-style: preserve-3d;
         backface-visibility: hidden;
-    }
-
-    .backSide {
-        /* backface-visibility: visible; */
-
-        transform: rotateX(180deg);
     }
 
     .pageSide > .pageSegment {
@@ -117,10 +115,10 @@
 
         transform-style: preserve-3d;
         transform-origin: left;
-        background-color: red;
+  
     }
 
-    .pageSegment::before{
+    .pageSegment::before {
         content: "";
 
         position: absolute;
@@ -128,22 +126,22 @@
         height: 100%;
         top: 0;
         left: 0;
-        
-        transform:scaleX(1.02);
+
+        transform: scaleX(1.02);
         background-image: var(--frontUrl);
         background-size: 800% 100%;
         background-position-x: calc(-1 * var(--idx) * 100%);
         backface-visibility: hidden;
     }
 
-    .pageSegment::after{
+    .pageSegment::after {
         content: "";
         position: absolute;
         width: 100%;
         height: 100%;
         top: 0;
         left: 0;
-        
+
         background-image: var(--backUrl);
         background-size: 800% 100%;
         background-position-x: calc(-1 * (7 - var(--idx)) * 100%);
@@ -158,18 +156,13 @@
 
     .reverse > .pageSide * {
         animation: reverseSegmentAnimation var(--duration) 1 ease-out;
-
     }
 
-    
-
-
-    .pageRoot.flip {
-        animation: pageAnimation 1000ms ease-out 1;
+    .flip {
+        animation: pageAnimation 1000ms ease-out 1 forwards;
     }
-    .pageRoot.flip.reverse {
-        animation: reversePageAnimation 1000ms ease-out 1;
-
+    .reverse {
+        animation: reversePageAnimation 1000ms ease-out 1 forwards;
     }
 
     @keyframes segmentAnimation {
@@ -202,11 +195,11 @@
     }
 
     @keyframes reversePageAnimation {
-        100% {
-            transform: rotateY(0);
-        }
         0% {
             transform: rotateY(-180deg);
+        }
+        100% {
+            transform: rotateY(0);
         }
     }
 </style>
